@@ -15,3 +15,4 @@ use App\Http\Controllers\ImportController;
 
 Route::get('/import-ouvrage', [ImportController::class, 'importOuvrage'])->name('import.ouvrage');
 Route::get('/import-customer', [ImportController::class, 'importCustomer'])->name('import.customer');
+Route::get('/import-detailing-item', [ImportController::class, 'importDetailingItem'])->name('import.detailing.item');

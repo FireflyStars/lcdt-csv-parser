@@ -7,6 +7,15 @@ use Illuminate\Support\Facades\DB;
 
 class ImportController extends Controller
 {
+    /**
+     * Home page
+     */
+    public function index(){
+        return view('welcome');
+    }
+    /**
+     * Import ouvrages from csv file located storage/app/ouvrage.csv for lcdt
+     */
     public function importOuvrage(){
         ini_set('max_execution_time', 600);
         $pareser = new OuvrageParser;
@@ -31,7 +40,9 @@ class ImportController extends Controller
         $pareser->importOuvrageToDB($ouvrageGroup);
         dd("ouvrage import done");
     }
-
+    /**
+     * Import customers from csv file located storage/app/client.csv for lcdt
+     */
     public function importCustomer(){
         ini_set('max_execution_time', 6000);
         $pareser = new CustomerParser;
@@ -41,21 +52,11 @@ class ImportController extends Controller
         }
         dd("customer import done");
     }
-
+    /**
+     * Import detailingitem from infoitems table
+     */
     public function importDetailingItem(){
         ini_set('max_execution_time', 60000);
-        // $brands = DB::table('brands')->select('name')->get()->map(function($value,$key){
-        //     return collect($value)->values();
-        //   })->collapse();
-        // $neweBrands = DB::table('infoitems')->whereNotIn('brand', $brands)->select(DB::raw('COUNT(*) as cnt'), 'brand')->groupBy('brand')->get();
-        // foreach ($neweBrands as $brand) {
-        //     DB::table('brandmatrix')->insert([
-        //         'oldword'=> '',
-        //         'newword'=> $brand->brand,
-        //         'nvofline'=> $brand->cnt,
-        //     ]);
-        // }
-        // dd("done");
         DB::table('infoitems')->orderBy('id')->chunk(1000, function($infoItems){
             foreach ($infoItems as $item) {
                 if(DB::table('detailingitem_copy')->where('tracking', $item->ItemTrackingKey)->count() == 0){
